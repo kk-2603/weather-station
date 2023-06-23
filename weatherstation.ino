@@ -2,16 +2,20 @@
 #include "DHT.h"
 #include <SFE_BMP180.h>
 #include <Wire.h>
+
 #define ALTITUDE 52.0
 #define DHTPIN 0 // what digital pin we're connected to
 #define DHTTYPE DHT11 // DHT 11
+
 SFE_BMP180 pressure;
 DHT dht(DHTPIN, DHTTYPE);
 const char* Networkname = "KK@BTech"; // Your WiFi network name
 const char* password = "kumudha@123"; // Your Password
+
 char status;
 double T,P,p0,a;
 WiFiServer server(80);
+
 void setup() {
 Serial.begin(115200);
 delay(100);
@@ -19,14 +23,19 @@ dht.begin();
 Serial.print("Having a Connection with ");
 Serial.println(Networkname);
 WiFi.begin(Networkname, password);
+ 
 while (WiFi.status() != WL_CONNECTED) {
 delay(250);
 Serial.print(".");
 }
+
+ 
 Serial.println("");
 Serial.println("WiFi is connected");
 server.begin();
 Serial.println("Server has started");
+
+ 
 Serial.println(WiFi.localIP());
  if (pressure.begin())
  Serial.println("BMP180 init success");
@@ -37,6 +46,7 @@ Serial.println(WiFi.localIP());
  }
  delay(1000);
 }
+
 void loop() {
  status = pressure.getPressure(P,T);
  if (status != 0)
@@ -46,6 +56,7 @@ Serial.print("relative pressure: ");
 Serial.print(p0,2);
 Serial.print(" mb, ");
 }
+ 
 float h = dht.readHumidity();
 // Reads Temperature in terms of Celcius
 float t = dht.readTemperature();
